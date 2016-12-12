@@ -1,0 +1,22 @@
+create database petstore;
+
+create table pets(
+	pet_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+	name VARCHAR(20) NOT NULL, 
+	status VARCHAR(20) NOT NULL, 
+	created_by VARCHAR(20) NOT NULL, 
+	created_date DATE NOT NULL, 
+	last_updated_by VARCHAR(20) NOT NULL, 
+	last_updated_date DATE NOT NULL
+);
+
+create table categories(
+	cat_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	FOREIGN KEY fk_pet_id (pet_id) REFERENCES pets(pet_id) 
+	ON UPDATE CASCADE ON DELETE RESTRICT,
+	name VARCHAR(20) NOT NULL,
+	created_by VARCHAR(20) NOT NULL, 
+	created_date DATE NOT NULL, 
+	last_updated_by VARCHAR(20) NOT NULL, 
+	last_updated_date DATE NOT NULL
+);

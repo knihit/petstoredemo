@@ -1,0 +1,32 @@
+/pet/{petId}
+
+{
+  "id": 0,
+  "category": {
+    "id": 0,
+    "name": "string"
+  },
+  "name": "doggie",
+  "photoUrls": [
+    "string"
+  ],
+  "tags": [
+    {
+      "id": 0,
+      "name": "string"
+    }
+  ],
+  "status": "available"
+}
+
+{
+  "id": 1,
+  "name": "doggie",
+  "photoUrls": [],
+  "tags": [],
+  "status": "available"
+}
+
+Messages
+400 Invalid ID supplied
+404 Pet not found
