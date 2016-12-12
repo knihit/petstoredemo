@@ -9,13 +9,21 @@ package com.infaspects.petstore.controller;
 
 import java.util.Collection;
 
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.infaspects.petstore.model.Pet;
@@ -24,6 +32,8 @@ import com.infaspects.petstore.repository.PetStoreRepository;
 @RestController
 @RequestMapping("/pet")
 public class PetStoreController {
+	
+	private final Logger logger = LoggerFactory.getLogger(PetStoreController.class);
 	
 	@Autowired
 	private PetStoreRepository repository;
@@ -45,7 +55,7 @@ public class PetStoreController {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Pet> addPet(@RequestBody Pet pet) {
+    public ResponseEntity<Pet> addPet(@Valid @RequestBody Pet pet) {
         return new ResponseEntity<Pet>(repository.save(pet), HttpStatus.CREATED);
     }
     
@@ -56,8 +66,21 @@ public class PetStoreController {
      * @return
      */
     @RequestMapping(path="/{id}", method=RequestMethod.GET)
-    public ResponseEntity<Pet> findByID(@PathVariable Integer id) {
-    	return new ResponseEntity<Pet>(repository.findOne(id), HttpStatus.OK);
+    public ResponseEntity<?> findByID(@PathVariable Integer id) {
+    	ResponseEntity<Pet> responseEntity = null;
+    	
+    	try {
+    		Pet pet = repository.findOne(id);
+        	if (null != pet) {
+        		responseEntity = new ResponseEntity<Pet>(pet, HttpStatus.OK);
+        	} else {
+        		responseEntity = new ResponseEntity(HttpStatus.NOT_FOUND);
+        	}
+    	} catch (Exception e){
+    		logger.error("Exception occured when finding pet by "+id, e.getMessage());
+    	}
+
+    	return responseEntity;
     }
     
     /**
@@ -66,9 +89,31 @@ public class PetStoreController {
      * @param id
      * @return
      */
-    @RequestMapping(path="/{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<?> deleteByID(@PathVariable Integer id) {
-    	repository.delete(id);
-    	return new ResponseEntity<>(null, HttpStatus.OK);
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(path="/{id}", method=RequestMethod.DELETE)
+    public ResponseEntity deleteByID(@PathVariable Integer id) {
+   	ResponseEntity responseEntity = null;
+    	
+    	try {
+    		Pet pet = repository.findOne(id);
+        	if (null != pet) {
+        		repository.delete(id);
+        		responseEntity = new ResponseEntity(HttpStatus.OK);
+        	} else {
+        		responseEntity = new ResponseEntity(HttpStatus.NOT_FOUND);
+        	}
+    	} catch (Exception e){
+    		logger.error("Exception occured when deleting pet by "+id, e.getMessage());
+    	}
+
+    	return responseEntity;
+    }
+    
+    
+    @ExceptionHandler( MethodArgumentNotValidException.class)
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.METHOD_NOT_ALLOWED)
+    protected void handleDMSRESTException(MethodArgumentNotValidException objException) {
+
     }
 }

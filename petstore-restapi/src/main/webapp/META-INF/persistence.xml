@@ -5,7 +5,12 @@
 
 	<persistence-unit name="petstore" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-
+		
+		<class>com.infaspects.petstore.model.Pet</class>
+		<class>com.infaspects.petstore.model.Category</class>
+		<class>com.infaspects.petstore.model.PhotoUrl</class>
+		<class>com.infaspects.petstore.model.Tag</class>
+		
 		<properties>
 			<!-- Configuring JDBC properties -->
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/petstore" />

@@ -9,11 +9,13 @@
 	<name>petstore-restapi</name>
 
 
-    <properties>
-        <hibernate.version>5.2.5.Final</hibernate.version>
-        <spring-test-dbunit.version>1.2.0</spring-test-dbunit.version>
-        <dbunit.version>2.5.0</dbunit.version>
-    </properties>
+	<properties>
+		<hibernate.version>5.2.5.Final</hibernate.version>
+		<spring-test-dbunit.version>1.2.0</spring-test-dbunit.version>
+		<dbunit.version>2.5.0</dbunit.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
