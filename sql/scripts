@@ -1,4 +1,8 @@
-create database petstore;
+create database if not exists petstore;
+
+alter database petstore
+  DEFAULT CHARACTER SET utf8
+  DEFAULT COLLATE utf8_general_ci;
 
 use petstore;
 
