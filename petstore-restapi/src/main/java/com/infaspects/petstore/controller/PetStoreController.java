@@ -30,12 +30,11 @@ import com.infaspects.petstore.model.Pet;
 import com.infaspects.petstore.repository.PetStoreRepository;
 
 @RestController
-@RequestMapping("/pet")
+@RequestMapping(path="/pet")
 public class PetStoreController {
 	
 	private final Logger logger = LoggerFactory.getLogger(PetStoreController.class);
 	
-	@Autowired
 	private PetStoreRepository repository;
 
 	/**
@@ -45,6 +44,7 @@ public class PetStoreController {
 	 */
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Collection<Pet>> getAllPets(){
+    	logger.debug("GET Request to get all pets");
         return new ResponseEntity<>((Collection<Pet>) repository.findAll(), HttpStatus.OK);
     }
     
@@ -56,6 +56,7 @@ public class PetStoreController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Pet> addPet(@Valid @RequestBody Pet pet) {
+    	logger.debug("POST Request for adding pet "+pet.getName());
         return new ResponseEntity<Pet>(repository.save(pet), HttpStatus.CREATED);
     }
     
@@ -67,13 +68,16 @@ public class PetStoreController {
      */
     @RequestMapping(path="/{id}", method=RequestMethod.GET)
     public ResponseEntity<?> findByID(@PathVariable Integer id) {
+    	logger.debug("Requesting pet with id "+id);
     	ResponseEntity<Pet> responseEntity = null;
     	
     	try {
     		Pet pet = repository.findOne(id);
         	if (null != pet) {
+        		logger.debug("pet with id "+id+" found");
         		responseEntity = new ResponseEntity<Pet>(pet, HttpStatus.OK);
         	} else {
+        		logger.debug("pet with id "+id+" not found");
         		responseEntity = new ResponseEntity(HttpStatus.NOT_FOUND);
         	}
     	} catch (Exception e){
@@ -92,14 +96,17 @@ public class PetStoreController {
     @SuppressWarnings("rawtypes")
 	@RequestMapping(path="/{id}", method=RequestMethod.DELETE)
     public ResponseEntity deleteByID(@PathVariable Integer id) {
+    logger.debug("delete pet with id "+id);
    	ResponseEntity responseEntity = null;
     	
     	try {
     		Pet pet = repository.findOne(id);
         	if (null != pet) {
+        		logger.debug("pet with id "+id+" found");
         		repository.delete(id);
         		responseEntity = new ResponseEntity(HttpStatus.OK);
         	} else {
+        		logger.debug("pet with id "+id+" not found");
         		responseEntity = new ResponseEntity(HttpStatus.NOT_FOUND);
         	}
     	} catch (Exception e){

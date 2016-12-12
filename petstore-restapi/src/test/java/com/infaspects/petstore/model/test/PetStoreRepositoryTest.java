@@ -8,12 +8,11 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.infaspects.petstore.model.Category;
@@ -24,15 +23,14 @@ import com.infaspects.petstore.model.Tag;
 import com.infaspects.petstore.repository.PetStoreRepository;
 
 @RunWith(SpringRunner.class)
-@ComponentScan
-@ContextConfiguration
+@EnableJpaRepositories(basePackages={"com.infaspects.petstore.repository"})
+@EntityScan(basePackages={"com.infaspects.petstore.model"})
 @Transactional
 public class PetStoreRepositoryTest {
 	
 	@Autowired
 	public PetStoreRepository petStoreRepository;
 	
-	@Ignore
 	@Test
 	public void addPet() {
 		
@@ -51,7 +49,6 @@ public class PetStoreRepositoryTest {
 		assertEquals(pet.toString(), retrievedPet.toString());
 	}
 
-	@Ignore
 	@Test
 	public void deletePet() {
 		Set<PhotoUrl> photoUrkSet = new HashSet<PhotoUrl>();

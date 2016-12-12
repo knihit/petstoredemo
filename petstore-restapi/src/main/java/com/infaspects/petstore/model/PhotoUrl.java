@@ -6,9 +6,11 @@ package com.infaspects.petstore.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
@@ -20,9 +22,11 @@ public class PhotoUrl implements Serializable {
 	 */
 	private static final long serialVersionUID = 6198140999765865612L;
 
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	int id;
 	
+	@Column(name = "url", length=20)
 	String url;
 	
 	protected PhotoUrl() {}
